@@ -100,7 +100,7 @@ int inserir(Node* antecessor, int valor){
 * Função remover nó da lista encadeada
 * @param recebe nó anterior e com ele verifica o proximo nó se é o valor que realmente deseja remover
 */
-void remover(Node* antecessor, int valor){
+int remover(Node* antecessor, int valor){
 	//busca nó para fazer remoção.
 	Node *lixo = antecessor->proximo;
 	//verifica se lixo realmente existe
@@ -112,9 +112,11 @@ void remover(Node* antecessor, int valor){
 		//atualiza nó do antecessor ligando ao proximo do que sera excluido
 		antecessor->proximo = lixo->proximo;
 		free(lixo);//exclui nó da memoria
+		return 1;
 	}else{
-		//printf(NAO_EXISTE);
+		return 0;
 	}
+	return 0;
 }
 
 /**
@@ -149,7 +151,7 @@ void inicializar_lista(Node* lista, int qtd_elementos){
 	printf("Total de elementos repetidos %d\n", qtd_elementos-result);
 }
 
-long lista_size(Node *lista){
+long count(Node *lista){
 	long cont=0;
 	Node *tmp = lista;
 	while(tmp->proximo!=NULL){

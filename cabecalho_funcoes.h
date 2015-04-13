@@ -6,24 +6,60 @@
 */
 
 
-/****** FUNÇÕES PRINCIPAIS (controllers) *****/
-//Função mãe das threads, responsável por iniciar contexto
-void start(Node* lista, long qtd_threads, int MODO);
-//função responsável por criar threads e finalizálas
-void manager_threads_mutex_all(Contexto * context, long qtd_threads);
-//função responsável por criar threads e finalizálas
-void manager_threads_mutex_all(Contexto * context, long qtd_threads);
-//função responsável por criar threads e finalizálas
-void manager_threads_mutex_all(Contexto * context, long qtd_threads);
-//Gerenciamento manual
+/************** FUNÇÕES PRINCIPAIS DA APLICAÇÃO *****************/
+/**
+* Função mãe das threads, responsável por iniciar contexto e fazer chamada do controller
+* solicitado pelo usuário
+* arquivo: main.c
+*/
+void start(Node* lista, int qtd_threads, int MODO);
+
+/**
+* Função responsável por criar threads e finalizálas, 
+* arquivo: "controllers/mutex_all.h" 
+*/
+void controller_threads_mutex_all(Contexto * context);
+
+/**
+* Função responsável por criar threads e finalizálas, 
+* arquivo: "controllers/mutex_by_node.h" 
+*/
+void controller_threads_mutex_by_node(Contexto * context);
+
+/**
+* Função responsável por criar threads e finalizálas, 
+* arquivo: "controllers/read_write.h" 
+*/
+void controller_threads_read_write(Contexto * context);
+
+/**
+* Gerenciamento manual da lista
+* arquivo: "controllers/manual.h"
+*/
 void manual(Node* lista);
 
-/***** FUNÇÕES THREADS ****/
+/**
+* Função escopo da thread com sessão crítica por nó
+* arquivo: "controllers/mutex_all.h" 
+*/
 void* slave_mutex_by_node(void* args);
+
+/**
+* Função escopo da thread  com sessão critica para a lista inteira
+* arquivo: "controllers/mutex_all.h" 
+*/
 void* slave_mutex_all(void* args);
+
+/**
+* Função escopo da thread com sessão critica read_write
+* arquivo: "controllers/mutex_all.h" 
+*/
 void* slave_read_write(void* args);
 
-/*** FUNÇÕES UTILITARIAS **/
+/**
+* Funções utilitárias do projeto
+* arquivo: main.c
+*/
 int get_randomic_operacao();
 
 /******* FIM FUNÇÕES ******/
