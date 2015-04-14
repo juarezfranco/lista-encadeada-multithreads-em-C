@@ -7,7 +7,7 @@
 //BIBLIOTECAS PADRÕES
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <math.h>//NOTA: precisa do parametro -lm para compilar
 
 //MEUS HEADERS
 #include "utils/constantes.h"
@@ -22,4 +22,4 @@
 
 // BIBLIOTECAS PARA TRABALHAR COM THREADS
 #include <sys/time.h>
-#include <pthread.h>
+#include <pthread.h>//NOTA: precisa do parametro -lpthread para compilar

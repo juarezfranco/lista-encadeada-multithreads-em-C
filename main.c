@@ -10,7 +10,7 @@
 */
 
 // compilar:
-// gcc -g -Wall -o <nome_exec> <nome_fonte.c> - lpthread
+// gcc -g -Wall -o <nome_exec> <nome_fonte.c> -lpthread -lm
 
 //Inclui todas as bibliotecas do projeto
 #include "libs.h"
@@ -93,21 +93,28 @@ void start(Node* lista, int qtd_threads, int MODO){
 	if(MODO==MUTEX_BY_NODE) printf(TITLE_MUTEX_BY_NODE);
 
 	//Entradas do usuario
-	input_int("Quantas inserções iniciais devem ser feito na lista?\n: ",&qtd_elementos_iniciais);
-	inicializar_lista(lista, qtd_elementos_iniciais);
-	imprimir(lista);
+	//input_int("Quantas inserções iniciais devem ser feito na lista?\n: ",&qtd_elementos_iniciais);
+	//inicializar_lista(lista, qtd_elementos_iniciais);
+	//imprimir(lista);
 	input_int("\nQuantidade de operações que serão realizadas pelas threads?\n: ", &qtd_operacoes);
 	input_int("\nPorcentagem de buscas? \n: %",&percent_search);
 	input_int("\nPorcentagem de inserções? \n: %",&percent_insert);
 	percent_delete = 100-(percent_insert+percent_search);
-	printf("\nPorcentagem de remoções: \n: %%%ld\n\n",percent_delete);
+	printf("\nPorcentagem de remoções: \n: %%%d\n\n",percent_delete);
 	//salva contexto desta função principal
 	context->lista 			= lista;
 	context->qtd_threads    = qtd_threads;
-	context->qtd_operacoes  = qtd_operacoes;
-	context->qtd_search		= (qtd_operacoes*percent_search)/100;
-	context->qtd_insert 	= (qtd_operacoes*percent_insert)/100;
-	context->qtd_delete 	= (qtd_operacoes*percent_delete)/100;
+	context->qtd_search		= round((qtd_operacoes*percent_search)/100.0);//round arredonda pra inteiro mais proximo, se não usar isso 
+	context->qtd_insert 	= round((qtd_operacoes*percent_insert)/100.0);//o loop pode ser infinito quando threads forem executar as operações.
+	context->qtd_delete 	= round((qtd_operacoes*percent_delete)/100.0);//Para compilar precisa do parametro -lm
+	//ajusta qtd para ficar exata com a total de operacoes soliticadas pelo usuario,
+	//pois com o calculo da porcentagem vc pode acabar perdendo ou ganhando algumas  operações,
+	context->qtd_operacoes = ajusta_qtd_operacoes(
+				qtd_operacoes, 
+				&(context->qtd_insert), 
+				&(context->qtd_delete),
+				&(context->qtd_search)
+	);
 
 	//captura tempo inicial
 	gettimeofday(&(context->t_inicial), NULL);

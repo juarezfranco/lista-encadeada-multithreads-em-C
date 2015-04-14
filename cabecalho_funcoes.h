@@ -70,4 +70,13 @@ int get_randomic_operacao();
 */
 void input_int(char *msg,int *input);
 
+/**
+* Função ajusta qtd para ficar exata com a total de operacoes soliticadas pelo usuario
+* pois com o calculo da porcentagem vc pode acabar perdendo ou ganhando algumas  operações, 
+* consequentemente o valor total de operações geradas pela porcentagem,
+* será diferente da qtd pedida pelo usuario.
+* Essa função ajusta corretamente o valor de operações que devem ser feitas para ficar de acordo com
+* a qtd de operações que o usuario solicitou
+*/
+long ajusta_qtd_operacoes(long total_operacao,long *_insert, long *_delete, long *_search);
 /******* FIM FUNÇÕES ******/
