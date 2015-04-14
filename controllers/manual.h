@@ -15,8 +15,7 @@ void manual(Node* lista){
 	system("clear");
 	printf(TITLE_MANUAL);
 
-	printf("Quantas inserções iniciais devem ser feito na lista?\n");
-	scanf("%d",&valor);
+	input_int("Quantas inserções iniciais devem ser feito na lista?\n",&valor);
 	if(valor>0)
 		inicializar_lista(lista, valor);
 	do{
@@ -33,9 +32,7 @@ void manual(Node* lista){
 			case '1':
 				printf("\nAntes:  ");
 				imprimir(lista);
-				printf("Inserir valor: ");
-				scanf("%d", &valor);
-				fflush(stdin);
+				input_int("Inserir valor: ",&valor);
 				node_antecessor=buscarAntecessor(lista, valor);
 				inserir(node_antecessor, valor);
 				printf("Depois: ");
@@ -44,9 +41,7 @@ void manual(Node* lista){
 			case '2':
 				printf("\nAntes:  ");
 				imprimir(lista);
-				printf("Remover valor: ");
-				scanf("%d", &valor);
-				fflush(stdin);
+				input_int("Remover valor: ",&valor);
 				node_antecessor=buscarAntecessor(lista, valor);
 				remover(node_antecessor, valor);
 				printf("Depois: ");

@@ -37,7 +37,7 @@ int main (int argc, char** argv){
 		printf("(4) Gerenciamento Manual.\n");
 		printf("(0) ++ Sair ++\n");
 		scanf("%s",&opcao);
-		fflush(stdin);
+		__fpurge(stdin);
 		qtd_threads = 8;
 		/** Chamada de funções de CONTROLLERS**/
 		switch (opcao){
@@ -71,27 +71,18 @@ int main (int argc, char** argv){
 	return 0;
 }
 
-int get_randomic_operacao(){
-	int opcao;
-	opcao = 1+rand()%3;
-	//1 = INSERT;
-	//2 = DELETE;
-	//3 = SEARCH;
-	return opcao;
-}
-
-
 /**
 * Função responsável por criar threads e escolher qual modo de sessão critica usar
 */
 void start(Node* lista, int qtd_threads, int MODO){
 	/** Variaveis locais **/
 	Contexto *context = new_contexto();//cria contexto para essa função
-	unsigned long percent_search, percent_insert, percent_delete;//inputs do usuario
-	unsigned long qtd_operacoes,qtd_elementos_iniciais;//inputs do usuario
+	int percent_search, percent_insert, percent_delete;//inputs do usuario
+	int qtd_operacoes,qtd_elementos_iniciais;//inputs do usuario
 	unsigned long total_operacoes=0; //recebera soma da qtd de operações realizadas pelas threads
 	unsigned long tempo_total=0;//recerá tempo total da execução da tarefa das threads
 	char opcao;//inputs usuario
+	
 	
 	/** Fim variaveis locais **/
 
@@ -102,16 +93,12 @@ void start(Node* lista, int qtd_threads, int MODO){
 	if(MODO==MUTEX_BY_NODE) printf(TITLE_MUTEX_BY_NODE);
 
 	//Entradas do usuario
-	printf("Quantas inserções iniciais devem ser feito na lista?\n: ");
-	scanf("%ld",&qtd_elementos_iniciais);
+	input_int("Quantas inserções iniciais devem ser feito na lista?\n: ",&qtd_elementos_iniciais);
 	inicializar_lista(lista, qtd_elementos_iniciais);
 	imprimir(lista);
-	printf("\nQuantidade de operações que serão realizadas pelas threads?\n: ");
-	scanf("%ld",&qtd_operacoes);
-	printf("\nPorcentagem de buscas? \n: %%");
-	scanf("%ld",&percent_search);
-	printf("\nPorcentagem de inserções? \n: %%");
-	scanf("%ld",&percent_insert);
+	input_int("\nQuantidade de operações que serão realizadas pelas threads?\n: ", &qtd_operacoes);
+	input_int("\nPorcentagem de buscas? \n: %",&percent_search);
+	input_int("\nPorcentagem de inserções? \n: %",&percent_insert);
 	percent_delete = 100-(percent_insert+percent_search);
 	printf("\nPorcentagem de remoções: \n: %%%ld\n\n",percent_delete);
 	//salva contexto desta função principal
@@ -158,12 +145,13 @@ void start(Node* lista, int qtd_threads, int MODO){
 	printf("\n Tempo total em minutos............%lf", tempo_total/1000000.0/60.0);
 	printf("\n\nDeseja imprimir Lista?\n(s/n): \n");
 	scanf("%s",&opcao);
-	fflush(stdin);
 	if(tolower(opcao)=='s')
 		imprimir(lista);
 
 	free(context);//libera da memória contexto dessa função
+	printf(PRESS_ENTER);
 }
+
 
 
 

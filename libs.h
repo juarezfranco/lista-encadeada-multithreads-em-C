@@ -8,8 +8,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 //MEUS HEADERS
 #include "utils/constantes.h"
+#include "utils/util.h"
 #include "models/node.h"
 #include "models/context.h"
 #include "cabecalho_funcoes.h"

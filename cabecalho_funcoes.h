@@ -56,10 +56,18 @@ void* slave_mutex_all(void* args);
 */
 void* slave_read_write(void* args);
 
+/******* FUNÇÕES UTILITÁRIAS DO PROJETO ********/
+
 /**
-* Funções utilitárias do projeto
-* arquivo: main.c
+* gerador de numero randomico que simboliza operação de inserção, remoção e busca
+* arquivo: "utils/util.h"
 */
 int get_randomic_operacao();
+
+/**
+* Função responsável por receber entrada de nmr inteiro do usuario e valida-la
+* arquivo: "utils/util.h"
+*/
+void input_int(char *msg,int *input);
 
 /******* FIM FUNÇÕES ******/
