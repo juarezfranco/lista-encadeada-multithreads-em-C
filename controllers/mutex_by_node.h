@@ -56,7 +56,7 @@ void* slave_mutex_by_node(void* args){
 	long valor;//valor chave passado por parametro para funções de inserção, remoção e busca
 	int operacao;//determina operação que thread deve fazer, inserção, remoção ou busca
 	int result;//resultado das funções de inserção e remoção, se foi inserido bem sucedido ou removido com sucesso
-	long max=context->qtd_operacoes*10; //evita multiplicação no laço
+	long max=context->qtd_operacoes*5; //evita multiplicação no laço
 	Node *node_antecessor;//Variavel utilizada para receber retorno de função buscar antecessor
 	int cont_operacoes=0;//contador de operações ja realizadas
 
@@ -80,7 +80,7 @@ void* slave_mutex_by_node(void* args){
 		}
 		//verifica operação de remoção
 		if(operacao==DELETE ){
-			node_antecessor = buscarAntecessor(context->lista,valor);//recupera nó antecessor do que deseja inserir
+			node_antecessor = buscarAntecessorComMutex(context->lista,valor);//recupera nó antecessor do que deseja inserir
 			if( context->cont_operacao_delete < context->qtd_delete ){
 				result = remover(node_antecessor, valor);//passa referencia do nó anterior para a função remover. Assim elimina a necessidade de fazer busca dentro do seu escopo				
 				//Sessão critica para escrita em variaveis do contexto
@@ -89,12 +89,12 @@ void* slave_mutex_by_node(void* args){
 				context->cont_operacao_delete++;//incrementa contador de operação de remoção ja feita
 				pthread_mutex_unlock(&(context->list_mutex));//sessão crítica
 			}
-			pthread_mutex_unlock(&(context->list_mutex));//sessão crítica
+			pthread_mutex_unlock(&(node_antecessor->mutex));//sessão crítica
 			
 		}
 		//verifica operação de busca
 		if(operacao==SEARCH ){
-			node_antecessor = buscarAntecessor(context->lista, valor);
+			node_antecessor = buscarAntecessorComMutex(context->lista, valor);
 			if ( context->cont_operacao_search < context->qtd_search ){
 				//Sessão critica para escrita em variaveis do contexto
 				pthread_mutex_lock(&(context->list_mutex));//sessão crítica
