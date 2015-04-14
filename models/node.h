@@ -19,6 +19,8 @@ typedef struct str_node{
 Node* new_node(void){
 	Node* node = (Node *) malloc(sizeof(Node));
 	node->proximo= NULL;
+	//inicializa mutex do nó
+	pthread_mutex_init(&(node->mutex),NULL);
 	return node;
 }
 
@@ -32,6 +34,8 @@ void finalizar_lista(Node* lista){
 	//chamada recursiva até chegar ao final da lista
 	if(lista->proximo!=NULL)
 		finalizar_lista(lista->proximo);
+	//destrói mutex do nó
+	pthread_mutex_destroy(&(lista->mutex),NULL);
 	//libera da memoria nó da lista
 	free(lista);
 	return;
@@ -74,6 +78,7 @@ int inserir(Node* antecessor, int valor){
 	}
 	//verifica se valores são iguais
 	if(antecessor->proximo->valor==valor){
+		pthread_mutex_destroy(&(novo_node->mutex),NULL);
 		free(novo_node);
 		return 0;
 	}
@@ -111,6 +116,8 @@ int remover(Node* antecessor, int valor){
 	if(lixo->valor==valor){
 		//atualiza nó do antecessor ligando ao proximo do que sera excluido
 		antecessor->proximo = lixo->proximo;
+		//destrói mutex do nó
+		pthread_mutex_destroy(&(lixo->mutex),NULL);
 		free(lixo);//exclui nó da memoria
 		return 1;
 	}else{

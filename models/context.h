@@ -36,5 +36,12 @@ Contexto *new_contexto(){
 	context->cont_operacao_search=0;
 	context->cont_operacao_insert=0;
 	context->cont_operacao_delete=0;
+	//inicializa mutex do contexto
+	pthread_mutex_init(&(context->list_mutex),NULL);
 	return context;
+}
+void finaliza_context(Contexto *context){
+	//finaliza mutex do contexto
+	pthread_mutex_destroy(&(context->list_mutex),NULL);
+	free(context);
 }

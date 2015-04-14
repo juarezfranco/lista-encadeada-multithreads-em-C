@@ -38,7 +38,7 @@ int main (int argc, char** argv){
 		printf("(0) ++ Sair ++\n");
 		scanf("%s",&opcao);
 		__fpurge(stdin);
-		qtd_threads = 8;
+		qtd_threads = 16;
 		/** Chamada de funções de CONTROLLERS**/
 		switch (opcao){
 			case '1':
@@ -155,7 +155,8 @@ void start(Node* lista, int qtd_threads, int MODO){
 	if(tolower(opcao)=='s')
 		imprimir(lista);
 
-	free(context);//libera da memória contexto dessa função
+	//libera da memória contexto dessa função
+	finaliza_context(context);
 	printf(PRESS_ENTER);
 }
 

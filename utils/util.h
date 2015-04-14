@@ -41,10 +41,8 @@ int get_randomic_operacao(){
 long ajusta_qtd_operacoes(long total,long *_insert, long *_delete, long *_search){
 	int val;
 	long think = *_insert + *_delete + *_search;
-	printf("think %ld\n", think);
 	//se total é igual a soma das operações então está tudo correto
 	if(total == think){
-		printf("%ld nao mudou\n", think);
 		return total;
 	}
 	//se total é maior então think deve aumentar
@@ -63,7 +61,6 @@ long ajusta_qtd_operacoes(long total,long *_insert, long *_delete, long *_search
 			}
 			think = *_insert+*_delete+*_search;
 		}while(total != think);
-		printf("%ld após incremento\n", think);
 		return think;
 	}
 	//se total é maior então think deve diminuir
@@ -82,7 +79,6 @@ long ajusta_qtd_operacoes(long total,long *_insert, long *_delete, long *_search
 			}
 			think = *_insert+*_delete+*_search;
 		}while(total != think);
-		printf("%ld após decremento\n", think);
 		return think;
 	}
 	return think;
