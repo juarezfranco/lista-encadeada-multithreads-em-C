@@ -1,6 +1,6 @@
 # TEMPO CALCULADO PARA CADA TIPO DE SESSÃO CRÍTICA
 #********** Um Mutex para lista inteira ********
-#op. 10mil\n
+#op. 10mil
 threads 8
 insert  33%
 busca   33%
