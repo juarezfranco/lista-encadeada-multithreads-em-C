@@ -1,3 +1,44 @@
 # projetos_c-lista_encadeada_multithreads
 Implementação lista encadeada multi thread com sessão crítica (mutex e read-write) utilizando a biblioteca lpthreads para linux
 
+
+# TEMPO CALCULADO PARA CADA TIPO DE SESSÃO CRÍTICA
+#********** Um Mutex para lista inteira ********
+#op. 10mil
+#threads 8
+#insert  33%
+#busca   33%
+#remocao 34%
+#MÉDIA:
+#segundos 0,2050626
+#microsegundos 205062,6
+
+
+#op. 100mil
+#threads 8
+#insert  33%
+#busca   33%
+#remocao 34%
+#MÉDIA:
+#segundos 17,10
+#microsegundos 17102761
+
+#**************** Um Mutex por nó  *****************
+#op. 10mil
+#threads 8
+#insert  33%
+#busca   33%
+#remocao 34%
+#MÉDIA:
+#segundos 0,081419
+#microsegundos 81419
+
+
+#op. 100mil
+#threads 8
+#insert  33%
+#busca   33%
+#remocao 34%
+#MÈDIA
+#segundos = 8,07
+#microsegundos = 8078017,66
