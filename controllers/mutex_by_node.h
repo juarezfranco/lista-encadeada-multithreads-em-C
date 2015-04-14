@@ -40,8 +40,9 @@ Node* buscarAntecessorComMutex(Node* raiz,int valor){
 		if(tmp->proximo->valor >= valor)
 			return tmp;//se acontecer o retorno aqui, o nó deve ser desbloquiado na função que receberá nó bloquiado
 		pthread_mutex_unlock(&(tmp->mutex));// desbloqueia nó crítica
-		pthread_mutex_lock(&(tmp->proximo->mutex));// bloqueia nó do proximo loop
+		
 		tmp = tmp->proximo;
+		pthread_mutex_lock(&(tmp->mutex));// bloqueia nó do proximo loop
 		
 	}
 	return tmp;//se acontecer o retorno aqui, o nó deve ser desbloquiado na função que receberá nó bloquiado
@@ -60,45 +61,47 @@ void* slave_mutex_by_node(void* args){
 	int cont_operacoes=0;//contador de operações ja realizadas
 
 	//loop de operações que a thread deve fazer na lista encadeada, faz apenas qtd de operações que usuario solicitou
-	while( cont_operacoes <= context->qtd_operacoes ){
+	while( cont_operacoes < context->qtd_operacoes ){
 		operacao = get_randomic_operacao();//verifica qual operação thread deve fazer, inserir, deletar ou buscar.
 		valor = 1+rand()%max;//recupera um valor randomico
 		//verifica operação de inserção
 		if(operacao==INSERT){
-			if( context->cont_operacao_insert < context->qtd_insert ){
-				node_antecessor = buscarAntecessorComMutex(context->lista,valor);//recupera nó antecessor do que deseja inserir
+			node_antecessor = buscarAntecessorComMutex(context->lista,valor);//recupera nó antecessor do que deseja inserir
+			if( context->cont_operacao_insert < context->qtd_insert ){				
+				//printf("%d , %d\n", context->cont_operacao_insert,node_antecessor->valor);
 				result = inserir(node_antecessor, valor);//passa referencia do nó anterior para a função inserir. Assim elimina a necessidade de fazer busca dentro do seu escopo				
-				pthread_mutex_unlock(&(node_antecessor->mutex));// desbloqueia nó da sessão crítica
 				//Sessão critica para escrita em variaveis do contexto
 				pthread_mutex_lock(&(context->list_mutex));//sessão crítica
 				context->cont_operacao_insert++;//incrementa contador do contexto de inserções ja feita pelas threads.
 				context->cont_insert+=result; //conta inserção bem sucedida, quando elemento não é repetido
 				pthread_mutex_unlock(&(context->list_mutex));//sessão crítica	
 			}
+			pthread_mutex_unlock(&(node_antecessor->mutex));// desbloqueia nó da sessão crítica
 		}
 		//verifica operação de remoção
 		if(operacao==DELETE ){
+			node_antecessor = buscarAntecessor(context->lista,valor);//recupera nó antecessor do que deseja inserir
 			if( context->cont_operacao_delete < context->qtd_delete ){
-				node_antecessor = buscarAntecessor(context->lista,valor);//recupera nó antecessor do que deseja inserir
 				result = remover(node_antecessor, valor);//passa referencia do nó anterior para a função remover. Assim elimina a necessidade de fazer busca dentro do seu escopo				
-				pthread_mutex_unlock(&(node_antecessor->mutex));// desbloqueia sessão crítica desse nó
 				//Sessão critica para escrita em variaveis do contexto
 				pthread_mutex_lock(&(context->list_mutex));//sessão crítica
 				context->cont_delete+=result;//conta remoção bem sucedida, quando elemento é encontrado na lista
 				context->cont_operacao_delete++;//incrementa contador de operação de remoção ja feita
 				pthread_mutex_unlock(&(context->list_mutex));//sessão crítica
 			}
+			pthread_mutex_unlock(&(context->list_mutex));//sessão crítica
+			
 		}
 		//verifica operação de busca
 		if(operacao==SEARCH ){
+			node_antecessor = buscarAntecessor(context->lista, valor);
 			if ( context->cont_operacao_search < context->qtd_search ){
-				node_antecessor = buscarAntecessor(context->lista, valor);
-				pthread_mutex_unlock(&(node_antecessor->mutex));// desbloqueia sessão crítica desse nó
 				//Sessão critica para escrita em variaveis do contexto
 				pthread_mutex_lock(&(context->list_mutex));//sessão crítica
 				context->cont_operacao_search++;//incrementa contador do contexto de buscas ja feita
 				pthread_mutex_unlock(&(context->list_mutex));//sessão crítica	
 			}
+			pthread_mutex_unlock(&(node_antecessor->mutex));// desbloqueia sessão crítica desse nó
 		}
 		//conta qtd de operações ja realizadas.
 		cont_operacoes = context->cont_operacao_insert + context->cont_operacao_delete + context->cont_operacao_search;			
