@@ -136,22 +136,26 @@ void start(Node* lista, int qtd_threads, int MODO){
 	//captura tempo final
 	gettimeofday(&(context->t_final), NULL);
 
+	//calcula tempo em microsegundos
 	tempo_total = (context->t_final.tv_sec - context->t_inicial.tv_sec) * 1000000 + 
 					((int)context->t_final.tv_usec - (int)context->t_inicial.tv_usec);
 
 	//soma todas as operações
 	total_operacoes= context->cont_operacao_insert+context->cont_operacao_delete+context->cont_operacao_search;
-	printf("\n._____________RESULTADOS_______________.\n");
-	printf("\n Total de operação de inserão......%ld", context->cont_operacao_insert);
+	printf("\n._________________RESULTADOS___________________.\n");
+	printf("\n Total de operações de inserão.....%ld", context->cont_operacao_insert);
 	printf("\n Inserções repetidas...............%ld", context->cont_operacao_insert - context->cont_insert);
-	printf("\n Total de operação de remoção......%ld", context->cont_operacao_delete);
+	printf("\n Total de operações de remoção.....%ld", context->cont_operacao_delete);
 	printf("\n Remoções bem sucedidas............%ld", context->cont_delete);
-	printf("\n Total de operação de buscas.......%ld", context->cont_operacao_search);
+	printf("\n Total de operações de buscas......%ld", context->cont_operacao_search);
 	printf("\n");
 	printf("\n Total de elementos na lista.......%ld", count(lista));
 	printf("\n Total de operações realizadas.....%ld", total_operacoes);
-	printf("\n.______________________________________.");
-	printf("\nTempo  decorrido:..................%ld  microsegundos\n", tempo_total);
+	printf("\n");
+	printf("\n.___________________TEMPO______________________.");
+	printf("\n Tempo total em microsegundos......%ld", tempo_total);
+	printf("\n Tempo total em segundos...........%lf", tempo_total/1000000.0);
+	printf("\n Tempo total em minutos............%lf", tempo_total/1000000.0/60.0);
 	printf("\n\nDeseja imprimir Lista?\n(s/n): \n");
 	scanf("%s",&opcao);
 	fflush(stdin);
