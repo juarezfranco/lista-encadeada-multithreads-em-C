@@ -82,7 +82,7 @@ int main (int argc, char** argv){
 void start(Node* lista, int qtd_threads, int MODO){
 	/** Variaveis locais **/
 	Contexto *context = new_contexto();//cria contexto para essa função
-	int percent_search, percent_insert, percent_delete;//inputs do usuario
+	int percent_search=0, percent_insert=0, percent_delete=0;//inputs do usuario
 	int qtd_operacoes,qtd_elementos_iniciais;//inputs do usuario
 	unsigned long total_operacoes=0; //recebera soma da qtd de operações realizadas pelas threads
 	unsigned long tempo_total=0;//recerá tempo total da execução da tarefa das threads
@@ -103,9 +103,15 @@ void start(Node* lista, int qtd_threads, int MODO){
 	//input_int("Quantas inserções iniciais devem ser feito na lista?\n: ",&qtd_elementos_iniciais);
 	//inicializar_lista(lista, qtd_elementos_iniciais);
 	//imprimir(lista);
+	
 	input_int("\nQuantidade de operações que serão realizadas pelas threads?\n: ", &qtd_operacoes);
-	input_int("\nPorcentagem de buscas? \n: %",&percent_search);
-	input_int("\nPorcentagem de inserções? \n: %",&percent_insert);
+	input_percent("\nPorcentagem de buscas? \n: %",&percent_search);
+	if(percent_search!=100)
+		do{
+			input_percent("\nPorcentagem de inserções? \n: %",&percent_insert);
+		if((percent_search+percent_insert)>100)
+				printf(BOLDRED"Valor inválido, informe um valor igual ou menor que %d\n" RESET_COLOR,100-percent_search);
+		}while((percent_search+percent_insert)>100);
 	percent_delete = 100-(percent_insert+percent_search);
 	printf("\nPorcentagem de remoções: \n:"BOLDYELLOW" %%%d\n"RESET_COLOR,percent_delete);
 	//salva contexto desta função principal

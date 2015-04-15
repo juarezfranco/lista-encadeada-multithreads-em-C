@@ -5,6 +5,21 @@
 */
 
 /**
+* Função responsável por receber entrada de valores para porcentagem e valida-la
+*/
+void input_percent(char *msg,int *input){
+	int result=0;
+	do{
+		printf("%s"BOLDYELLOW,msg);	
+		result = scanf("%d",input);
+		__fpurge(stdin);//limpa lixo do teclado
+		if(result==0 || !((*input) >=0 && (*input) <=100))
+			printf(BOLDRED "valor inválido! Valor deve ser ou estar entre 0 e 100." RESET_COLOR);
+	}while(result==0 || !((*input) >=0 && (*input) <=100));
+	printf(RESET_COLOR);
+}
+
+/**
 * Função responsável por receber entrada de nmr inteiro do usuario e valida-la
 */
 void input_int(char *msg,int *input){
