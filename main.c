@@ -29,15 +29,16 @@ int main (int argc, char** argv){
 		//cria lista
 		lista = new_node();
 		system("clear");
-		printf(CABECALHO);
-		printf("Seleciona uma opção:\n");
+		printf(BOLDWHITE CABECALHO RESET_COLOR);
+		printf("Selecione uma opção:\n");
 		printf("(1) Read-write locks.\n");
 		printf("(2) Um mutex para a lista inteira\n");
 		printf("(3) Um mutex por nó\n");
 		printf("(4) Gerenciamento Manual.\n");
 		printf("(5) Calcular Todos.)\n");
-		printf("(0) ++ Sair ++\n");
+		printf("(0) ++ Sair ++\n: "BOLDYELLOW);
 		scanf("%s",&opcao);
+		printf(RESET_COLOR);
 		__fpurge(stdin);
 		qtd_threads = 16;
 		/** Chamada de funções de CONTROLLERS**/
@@ -59,16 +60,17 @@ int main (int argc, char** argv){
 			case '0':
 				break;
 			default:
-				printf("Opcão inválida!\n");	
-				printf(PRESS_ENTER);	
+				printf(BOLDRED "  Opcão inválida!\n" RESET_COLOR);	
+				printf(PRESS_ENTER);
+				break;	
 		}
 		//libera lista da memória
 		finalizar_lista(lista);
 		//Espera pressionar alguma tecla
 		if(opcao!='0'){
 			getchar();
-			getchar();
 		}
+		system("clear");
 	}while(opcao!='0');
 	printf(RODAPE);
 	return 0;
@@ -91,9 +93,11 @@ void start(Node* lista, int qtd_threads, int MODO){
 
 	system("clear");
 	//define cabeçalho
+	printf(BOLDYELLOW);
 	if(MODO==READ_WRITE) 	printf(TITLE_READ_WRITE);
 	if(MODO==MUTEX_ALL)		printf(TITLE_MUTEX_ALL);
 	if(MODO==MUTEX_BY_NODE) printf(TITLE_MUTEX_BY_NODE);
+	printf(RESET_COLOR);
 
 	//Entradas do usuario
 	//input_int("Quantas inserções iniciais devem ser feito na lista?\n: ",&qtd_elementos_iniciais);
@@ -103,7 +107,7 @@ void start(Node* lista, int qtd_threads, int MODO){
 	input_int("\nPorcentagem de buscas? \n: %",&percent_search);
 	input_int("\nPorcentagem de inserções? \n: %",&percent_insert);
 	percent_delete = 100-(percent_insert+percent_search);
-	printf("\nPorcentagem de remoções: \n: %%%d\n\n",percent_delete);
+	printf("\nPorcentagem de remoções: \n:"BOLDYELLOW" %%%d\n"RESET_COLOR,percent_delete);
 	//salva contexto desta função principal
 	context->lista 			= lista;
 	context->qtd_threads    = qtd_threads;
@@ -153,7 +157,7 @@ void imprimir_contexto(Contexto *context){
 	//soma todas as operações
 
 	total_operacoes= context->cont_operacao_insert+context->cont_operacao_delete+context->cont_operacao_search;
-	printf("\n._________________RESULTADOS___________________.\n");
+	printf(BOLDWHITE"\n._________________RESULTADOS___________________.\n"RESET_COLOR);
 	printf("\n Total de operações de inserão.....%ld", context->cont_operacao_insert);
 	printf("\n Inserções repetidas...............%ld", context->cont_operacao_insert - context->cont_insert);
 	printf("\n Total de operações de remoção.....%ld", context->cont_operacao_delete);
@@ -163,7 +167,7 @@ void imprimir_contexto(Contexto *context){
 	printf("\n Total de elementos na lista.......%ld", count(lista));
 	printf("\n Total de operações realizadas.....%ld", total_operacoes);
 	printf("\n");
-	printf("\n.___________________TEMPO______________________.");
+	printf(BOLDWHITE"\n.___________________TEMPO______________________."RESET_COLOR);
 	printf("\n Tempo total em microsegundos......%ld", tempo_total);
 	printf("\n Tempo total em segundos...........%lf", tempo_total/1000000.0);
 	printf("\n Tempo total em minutos............%lf", tempo_total/1000000.0/60.0);

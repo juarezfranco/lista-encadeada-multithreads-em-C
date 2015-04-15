@@ -10,12 +10,13 @@
 void input_int(char *msg,int *input){
 	int result=0;
 	do{
-		printf("%s",msg);	
+		printf("%s"BOLDYELLOW,msg);	
 		result = scanf("%d",input);
 		__fpurge(stdin);//limpa lixo do teclado
 		if(result==0)
-			printf("valor inválido! entre novamente com um numero.\n");
+			printf(BOLDRED "valor inválido!" RESET_COLOR);
 	}while(result==0);
+	printf(RESET_COLOR);
 }
 
 /**
@@ -92,7 +93,7 @@ long ajusta_qtd_operacoes(long total,long *_insert, long *_delete, long *_search
 */
 void limpa_linha(char key){
      int i;//indice do caracter na linha
-     int max_caracter=44;//indica o maximo de caracter que a linha pode chegar a ter, para linhas com mt texto, coloque um nmr bem maior
+     int max_caracter=58;//indica o maximo de caracter que a linha pode chegar a ter, para linhas com mt texto, coloque um nmr bem maior
      printf("\r");//retorna para o inicio da linha que pretende reutilizar, isso não limpa a linha, apenas posiciona cursor ao inicio da linha
 
      //Agora precisamos limpar a linha,
@@ -104,7 +105,7 @@ void limpa_linha(char key){
     	printf("%c",key);
     else
     	printf("  ");
-     printf("\r");//volta ao inicio da linha , dessa vez ela está em branco.
+    printf("\r");//volta ao inicio da linha , dessa vez ela está em branco.
 
  }
 
@@ -118,24 +119,25 @@ void show_loading(Contexto *context){
 	//condição
 	//status deve ser incrementado em outra função
 	while(status < context->qtd_operacoes){
+		limpa_linha(']');//chama função limpa_linha e adiciona ] no final da linha
 		//recupera qtd de operações ja realizada pelas threads
 		status = context->cont_operacao_insert + context->cont_operacao_delete + context->cont_operacao_search;	
 		//tranforma em porcentagem o status
 		porcento = (status * 100) / context->qtd_operacoes;
-		printf ("Processando: %d%%  [", porcento);
+		printf ("Processando:  %d%%    [", porcento);
         fflush (stdout);//garante a escrita de dados imediatamente na tela                  
         //repare mod 10, eu limito a qtd de pontos q serao gerados
-        for (j = 0; j < status%100; j++){
-        	if(j%4==0)
+        for (j = 0; j < porcento; j++){
+        	if(j%3==0)
         		printf("=");
         }  
+        printf(">");
         fflush (stdout);//garante a escrita de dados imediatamente na tela
-        usleep(50000);//função espera por tempo, parametro em microsegundos.                    
-        //(*status)++; //descomentar linha para fazer teste
-        limpa_linha(']');//chama função limpa_linha e adiciona ] no final da linha
+        usleep(50000);//função espera por tempo, parametro em microsegundos.                            
+
     }          
     limpa_linha('\0'); //chama função limpa_linha e não adiciona nada no final da linha
-    printf("Processamento concluído 100%%\n");
+    printf(BOLDGREEN"Processamento concluído 100%%\n"RESET_COLOR);
 
 }
 

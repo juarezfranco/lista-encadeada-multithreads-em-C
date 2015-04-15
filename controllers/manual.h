@@ -9,27 +9,29 @@
 * Função responsável por gerenciamento manual da lista encadeada
 */
 void manual(Node* lista){
-	char opcao;
+	int opcao;
 	int valor;
 	Node *node_antecessor;
 	system("clear");
-	printf(TITLE_MANUAL);
+	printf(BOLDYELLOW TITLE_MANUAL RESET_COLOR);
 
-	input_int("Quantas inserções iniciais devem ser feito na lista?\n",&valor);
-	if(valor>0)
+	input_int("\nQuantas inserções iniciais devem ser feito na lista?\n: ",&valor);
+	if(valor>0){
 		inicializar_lista(lista, valor);
+		printf("\n"PRESS_ENTER);
+		getchar();
+	}
 	do{
 		system("clear");
-		printf(TITLE_MANUAL);
+		printf(BOLDYELLOW TITLE_MANUAL RESET_COLOR);
 		imprimir(lista);
 		printf("\n(1) Inserir\n");
 		printf("(2) Remover\n");
 		printf("(0) Voltar\n");
-		scanf("%s",&opcao);
-		fflush(stdin);
-		
+		input_int("\nOpção: ",&opcao);
+
 		switch(opcao){
-			case '1':
+			case 1:
 				printf("\nAntes:  ");
 				imprimir(lista);
 				input_int("Inserir valor: ",&valor);
@@ -38,7 +40,7 @@ void manual(Node* lista){
 				printf("Depois: ");
 				imprimir(lista);
 				break;
-			case '2':
+			case 2:
 				printf("\nAntes:  ");
 				imprimir(lista);
 				input_int("Remover valor: ",&valor);
@@ -47,19 +49,16 @@ void manual(Node* lista){
 				printf("Depois: ");
 				imprimir(lista);
 				break;
-			case '0':
+			case 0:
 				break;
 			default:
-				printf("Opção inválida\n");
+				printf(BOLDRED "Opção inválida\n" RESET_COLOR);
 		}
 		
 		//Espera pressionar alguma tecla
 		printf(PRESS_ENTER);
-		if(opcao!='0'){
+		if(opcao!=0){
 			getchar();
-			fflush(stdin);
-			getchar();
-			fflush(stdin);
 		}
-	}while(opcao!='0');
+	}while(opcao!=0);
 }
