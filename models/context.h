@@ -20,6 +20,7 @@ typedef struct{
 		cont_delete;		 //contador de remoções bem sucedidas
 	Node *lista;
 	pthread_mutex_t list_mutex;
+	pthread_rwlock_t rwlock;
 	struct timeval t_inicial, t_final;
 }Contexto;
 
@@ -37,11 +38,9 @@ Contexto *new_contexto(){
 	context->cont_operacao_insert=0;
 	context->cont_operacao_delete=0;
 	//inicializa mutex do contexto
-	pthread_mutex_init(&(context->list_mutex),NULL);
 	return context;
 }
 void finaliza_context(Contexto *context){
 	//finaliza mutex do contexto
-	pthread_mutex_destroy(&(context->list_mutex),NULL);
 	free(context);
 }

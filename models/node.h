@@ -78,20 +78,13 @@ int inserir(Node* antecessor, int valor){
 	}
 	//verifica se valores são iguais
 	if(antecessor->proximo->valor==valor){
+		//destrói seu mutex
 		pthread_mutex_destroy(&(novo_node->mutex),NULL);
+		//desfaz novo nó da memoria
 		free(novo_node);
 		return 0;
 	}
 	//Novo nó será adicionado entre dois nós
-	
-
-	//entra no loop caso haja alguma inserção dupla de duas threads, 
-	//assim força a sempre inserir na posição correta
-	//corrige possivel falha do modo mutex_by_node
-	/*while(antecessor->proximo->valor > valor){
-		if(antecessor->proximo==NULL) break;
-		antecessor = antecessor->proximo;
-	}*/
 	tmp = antecessor->proximo;
 	//insere novo nó depois depois do antecessor
 	antecessor->proximo = novo_node;

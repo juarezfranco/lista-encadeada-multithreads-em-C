@@ -77,6 +77,13 @@ void input_int(char *msg,int *input);
 * será diferente da qtd pedida pelo usuario.
 * Essa função ajusta corretamente o valor de operações que devem ser feitas para ficar de acordo com
 * a qtd de operações que o usuario solicitou
+* Arquivo: "utils/util.h"
 */
 long ajusta_qtd_operacoes(long total_operacao,long *_insert, long *_delete, long *_search);
+
+/**
+* Função imprimi informações do contexto
+* Arquivo: main.c
+*/
+void imprimir_contexto(Contexto *context);
 /******* FIM FUNÇÕES ******/

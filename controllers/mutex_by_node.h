@@ -11,8 +11,12 @@
 */
 void controller_threads_mutex_by_node(Contexto *context){
 	long i;
-
 	pthread_t threads[context->qtd_threads];//threads
+
+	//inicializa mutex do contexto
+	pthread_mutex_init(&(context->list_mutex),NULL);
+
+	//cria threads
 	for(i=0 ; i<context->qtd_threads ; i++){
 			if(pthread_create(&threads[i],NULL,slave_mutex_by_node, context)!=0)
 				perror(FALHA_CRIAR_THREADS);
@@ -22,6 +26,8 @@ void controller_threads_mutex_by_node(Contexto *context){
 		if(pthread_join(threads[i],NULL)!=0)
 			perror(FALHA_ESPERAR_THREADS);
 	}
+	//finaliza mutex do contexto
+	pthread_mutex_destroy(&(context->list_mutex),NULL);
 }
 
 /**
@@ -56,7 +62,7 @@ void* slave_mutex_by_node(void* args){
 	long valor;//valor chave passado por parametro para funções de inserção, remoção e busca
 	int operacao;//determina operação que thread deve fazer, inserção, remoção ou busca
 	int result;//resultado das funções de inserção e remoção, se foi inserido bem sucedido ou removido com sucesso
-	long max=context->qtd_operacoes*5; //evita multiplicação no laço
+	long max=context->qtd_operacoes*5; //determina numero maximo que pode ser gerado para a chave
 	Node *node_antecessor;//Variavel utilizada para receber retorno de função buscar antecessor
 	int cont_operacoes=0;//contador de operações ja realizadas
 
@@ -64,11 +70,13 @@ void* slave_mutex_by_node(void* args){
 	while( cont_operacoes < context->qtd_operacoes ){
 		operacao = get_randomic_operacao();//verifica qual operação thread deve fazer, inserir, deletar ou buscar.
 		valor = 1+rand()%max;//recupera um valor randomico
+		
+		//conta qtd de operações ja realizadas.
+		cont_operacoes = context->cont_operacao_insert + context->cont_operacao_delete + context->cont_operacao_search;			
 		//verifica operação de inserção
 		if(operacao==INSERT){
 			node_antecessor = buscarAntecessorComMutex(context->lista,valor);//recupera nó antecessor do que deseja inserir
-			if( context->cont_operacao_insert < context->qtd_insert ){				
-				//printf("%d , %d\n", context->cont_operacao_insert,node_antecessor->valor);
+			if( context->cont_operacao_insert < context->qtd_insert && cont_operacoes < context->qtd_operacoes){				
 				result = inserir(node_antecessor, valor);//passa referencia do nó anterior para a função inserir. Assim elimina a necessidade de fazer busca dentro do seu escopo				
 				//Sessão critica para escrita em variaveis do contexto
 				pthread_mutex_lock(&(context->list_mutex));//sessão crítica
@@ -78,10 +86,12 @@ void* slave_mutex_by_node(void* args){
 			}
 			pthread_mutex_unlock(&(node_antecessor->mutex));// desbloqueia nó da sessão crítica
 		}
+		//conta qtd de operações ja realizadas.
+		cont_operacoes = context->cont_operacao_insert + context->cont_operacao_delete + context->cont_operacao_search;			
 		//verifica operação de remoção
 		if(operacao==DELETE ){
-			node_antecessor = buscarAntecessorComMutex(context->lista,valor);//recupera nó antecessor do que deseja inserir
-			if( context->cont_operacao_delete < context->qtd_delete ){
+			node_antecessor = buscarAntecessorComMutex(context->lista,valor);//recupera nó antecessor do que deseja remover
+			if( context->cont_operacao_delete < context->qtd_delete && cont_operacoes < context->qtd_operacoes){
 				result = remover(node_antecessor, valor);//passa referencia do nó anterior para a função remover. Assim elimina a necessidade de fazer busca dentro do seu escopo				
 				//Sessão critica para escrita em variaveis do contexto
 				pthread_mutex_lock(&(context->list_mutex));//sessão crítica
@@ -92,10 +102,12 @@ void* slave_mutex_by_node(void* args){
 			pthread_mutex_unlock(&(node_antecessor->mutex));//sessão crítica
 			
 		}
+		//conta qtd de operações ja realizadas.
+		cont_operacoes = context->cont_operacao_insert + context->cont_operacao_delete + context->cont_operacao_search;			
 		//verifica operação de busca
 		if(operacao==SEARCH ){
 			node_antecessor = buscarAntecessorComMutex(context->lista, valor);
-			if ( context->cont_operacao_search < context->qtd_search ){
+			if ( context->cont_operacao_search < context->qtd_search && cont_operacoes < context->qtd_operacoes){
 				//Sessão critica para escrita em variaveis do contexto
 				pthread_mutex_lock(&(context->list_mutex));//sessão crítica
 				context->cont_operacao_search++;//incrementa contador do contexto de buscas ja feita

@@ -35,6 +35,7 @@ int main (int argc, char** argv){
 		printf("(2) Um mutex para a lista inteira\n");
 		printf("(3) Um mutex por nó\n");
 		printf("(4) Gerenciamento Manual.\n");
+		printf("(5) Calcular Todos.)\n", );
 		printf("(0) ++ Sair ++\n");
 		scanf("%s",&opcao);
 		__fpurge(stdin);
@@ -53,6 +54,8 @@ int main (int argc, char** argv){
 			case '4':
 				manual(lista);
 				break;
+			//case '5':
+			//	break;
 			case '0':
 				break;
 			default:
@@ -130,11 +133,25 @@ void start(Node* lista, int qtd_threads, int MODO){
 	//captura tempo final
 	gettimeofday(&(context->t_final), NULL);
 
+	//imprimir informações do contexto
+	imprimir_contexto(context);
+
+	//libera da memória contexto dessa função
+	finaliza_context(context);
+	printf(PRESS_ENTER);
+}
+
+/**
+* Função imprime informações do contexto
+*/
+void imprimir_contexto(Contexto *context){
+	long tempo_total,total_operacoes;
+
 	//calcula tempo em microsegundos
 	tempo_total = (context->t_final.tv_sec - context->t_inicial.tv_sec) * 1000000 + 
 					((int)context->t_final.tv_usec - (int)context->t_inicial.tv_usec);
-
 	//soma todas as operações
+
 	total_operacoes= context->cont_operacao_insert+context->cont_operacao_delete+context->cont_operacao_search;
 	printf("\n._________________RESULTADOS___________________.\n");
 	printf("\n Total de operações de inserão.....%ld", context->cont_operacao_insert);
@@ -150,16 +167,13 @@ void start(Node* lista, int qtd_threads, int MODO){
 	printf("\n Tempo total em microsegundos......%ld", tempo_total);
 	printf("\n Tempo total em segundos...........%lf", tempo_total/1000000.0);
 	printf("\n Tempo total em minutos............%lf", tempo_total/1000000.0/60.0);
-	printf("\n\nDeseja imprimir Lista?\n(s/n): \n");
-	scanf("%s",&opcao);
-	if(tolower(opcao)=='s')
-		imprimir(lista);
+	printf("\n");
+	//printf("\n\nDeseja imprimir Lista?\n(s/n): \n");
+	//scanf("%s",&opcao);
+	//if(tolower(opcao)=='s')
+	//	imprimir(lista);
 
-	//libera da memória contexto dessa função
-	finaliza_context(context);
-	printf(PRESS_ENTER);
 }
-
 
 
 

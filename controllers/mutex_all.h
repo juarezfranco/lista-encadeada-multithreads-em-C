@@ -11,6 +11,11 @@
 void controller_threads_mutex_all(Contexto *context){
 	long i;
 	pthread_t threads[context->qtd_threads];//threads
+
+	//inicializa mutex do contexto
+	pthread_mutex_init(&(context->list_mutex),NULL);
+
+	//cria threads
 	for(i=0;i < context->qtd_threads ; i++){
 		if(pthread_create(&threads[i],NULL, slave_mutex_all , context)!=0)
 			perror(FALHA_CRIAR_THREADS);
@@ -20,6 +25,10 @@ void controller_threads_mutex_all(Contexto *context){
 		if(pthread_join(threads[i],NULL)!=0)
 			perror(FALHA_ESPERAR_THREADS);
 	}
+	//finaliza mutex do contexto
+	pthread_mutex_destroy(&(context->list_mutex),NULL);
+
+
 }
 
 /**
@@ -30,7 +39,7 @@ void* slave_mutex_all(void *args){
 	long valor;//valor chave passado por parametro para funções de inserção, remoção e busca
 	int operacao;//determina operação que thread deve fazer, inserção, remoção ou busca
 	int result;//resultado das funções de inserção e remoção, se foi inserido bem sucedido ou removido com sucesso
-	long max=context->qtd_operacoes*100; //evita multiplicação no laço
+	long max=context->qtd_operacoes*10; //determina numero maximo que pode ser gerado para a chave
 	Node *node_antecessor;//Variavel utilizada para receber retorno de função buscar antecessor
 	long cont_operacoes=0;//contador de operações ja realizadas
 
@@ -40,14 +49,18 @@ void* slave_mutex_all(void *args){
 		valor = 1+rand()%max;//recupera um valor randomico
 		//verifica operação de inserção
 		if(operacao==INSERT){
-			pthread_mutex_lock(&(context->list_mutex));//sessão crítica
-			if(operacao==INSERT && ( context->cont_operacao_insert < context->qtd_insert )){
+			
+			if(operacao==INSERT){
+				pthread_mutex_lock(&(context->list_mutex));//sessão crítica
+				if ( context->cont_operacao_insert < context->qtd_insert ){
 					node_antecessor = buscarAntecessor(context->lista,valor);//recupera nó antecessor do que deseja inserir
 					result = inserir(node_antecessor, valor);//passa referencia do nó anterior para a função inserir. Assim elimina a necessidade de fazer busca dentro do seu escopo														
 					context->cont_insert+=result;//conta inserção bem sucedida, quando não inserção é repetida
 					context->cont_operacao_insert++;//incrementa contador do contexto de inserções ja feita pelas threads.
+				}
+				pthread_mutex_unlock(&(context->list_mutex));//libera da sessão crítica	
 			}
-			pthread_mutex_unlock(&(context->list_mutex));//libera da sessão crítica	
+			
 		}
 		//verifica operação de remoção
 		if(operacao==DELETE){
