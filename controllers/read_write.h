@@ -20,6 +20,8 @@ void controller_threads_read_write(Contexto *context){
 		if(pthread_create(&threads[i],NULL,slave_read_write, context)!=0)
 			perror(FALHA_CRIAR_THREADS);
 	}
+	show_loading(context);
+	
 	//espera todas as threads terminarem suas operações
 	for( i=0 ; i < context->qtd_threads ; i++){
 		if(pthread_join(threads[i],NULL)!=0)
@@ -92,7 +94,9 @@ void* slave_read_write(void* args){
 			
 		}
 		//conta qtd de operações ja realizadas.
+		pthread_rwlock_rdlock(&(context->rwlock));//bloqueiado para leitura
 		cont_operacoes = context->cont_operacao_insert + context->cont_operacao_delete + context->cont_operacao_search;			
+		pthread_rwlock_unlock(&(context->rwlock));//desbloqueia leitura
 		
 	}
 }

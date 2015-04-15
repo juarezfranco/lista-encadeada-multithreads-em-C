@@ -35,7 +35,7 @@ int main (int argc, char** argv){
 		printf("(2) Um mutex para a lista inteira\n");
 		printf("(3) Um mutex por nó\n");
 		printf("(4) Gerenciamento Manual.\n");
-		printf("(5) Calcular Todos.)\n", );
+		printf("(5) Calcular Todos.)\n");
 		printf("(0) ++ Sair ++\n");
 		scanf("%s",&opcao);
 		__fpurge(stdin);

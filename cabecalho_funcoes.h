@@ -86,4 +86,6 @@ long ajusta_qtd_operacoes(long total_operacao,long *_insert, long *_delete, long
 * Arquivo: main.c
 */
 void imprimir_contexto(Contexto *context);
+
+
 /******* FIM FUNÇÕES ******/

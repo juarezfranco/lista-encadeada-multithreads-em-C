@@ -20,6 +20,9 @@ void controller_threads_mutex_all(Contexto *context){
 		if(pthread_create(&threads[i],NULL, slave_mutex_all , context)!=0)
 			perror(FALHA_CRIAR_THREADS);
 	}
+
+	show_loading(context);
+
 	//espera todas as threads terminarem suas operações
 	for(i=0;i < context->qtd_threads;i++){
 		if(pthread_join(threads[i],NULL)!=0)

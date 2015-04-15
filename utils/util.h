@@ -83,3 +83,60 @@ long ajusta_qtd_operacoes(long total,long *_insert, long *_delete, long *_search
 	}
 	return think;
 }
+
+
+/**
+* Função limpa ultima linha do terminal
+* parametro key, é o caracter adicionado no final da linha,
+* se nao quiser adicionar nada passe '\0'
+*/
+void limpa_linha(char key){
+     int i;//indice do caracter na linha
+     int max_caracter=44;//indica o maximo de caracter que a linha pode chegar a ter, para linhas com mt texto, coloque um nmr bem maior
+     printf("\r");//retorna para o inicio da linha que pretende reutilizar, isso não limpa a linha, apenas posiciona cursor ao inicio da linha
+
+     //Agora precisamos limpar a linha,
+     //substitui todos os caracteres existentes por espaço em branco
+     for(i=0;i<max_caracter;i++){
+        printf(" ");//vai preenchendo a linha com espaços em branco
+    }
+    if(key!='\0')
+    	printf("%c",key);
+    else
+    	printf("  ");
+     printf("\r");//volta ao inicio da linha , dessa vez ela está em branco.
+
+ }
+
+/**
+* Função de carregamento animado
+* 
+*/
+void show_loading(Contexto *context){
+	int j, porcento=0,status=0;
+	printf("\n");
+	//condição
+	//status deve ser incrementado em outra função
+	while(status < context->qtd_operacoes){
+		//recupera qtd de operações ja realizada pelas threads
+		status = context->cont_operacao_insert + context->cont_operacao_delete + context->cont_operacao_search;	
+		//tranforma em porcentagem o status
+		porcento = (status * 100) / context->qtd_operacoes;
+		printf ("Processando: %d%%  [", porcento);
+        fflush (stdout);//garante a escrita de dados imediatamente na tela                  
+        //repare mod 10, eu limito a qtd de pontos q serao gerados
+        for (j = 0; j < status%100; j++){
+        	if(j%4==0)
+        		printf("=");
+        }  
+        fflush (stdout);//garante a escrita de dados imediatamente na tela
+        usleep(50000);//função espera por tempo, parametro em microsegundos.                    
+        //(*status)++; //descomentar linha para fazer teste
+        limpa_linha(']');//chama função limpa_linha e adiciona ] no final da linha
+    }          
+    limpa_linha('\0'); //chama função limpa_linha e não adiciona nada no final da linha
+    printf("Processamento concluído 100%%\n");
+
+}
+
+

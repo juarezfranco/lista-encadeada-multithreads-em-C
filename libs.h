@@ -11,10 +11,10 @@
 
 //MEUS HEADERS
 #include "utils/constantes.h"
-#include "utils/util.h"
 #include "models/node.h"
 #include "models/context.h"
 #include "cabecalho_funcoes.h"
+#include "utils/util.h"
 #include "controllers/manual.h"
 #include "controllers/mutex_all.h"
 #include "controllers/mutex_by_node.h"
