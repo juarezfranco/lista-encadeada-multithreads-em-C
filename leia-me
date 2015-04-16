@@ -1,0 +1,5 @@
+Para compilar use o omando
+
+$ gcc -g -Wall -o <nome_exec> <nome_fonte.c> -lpthread -lm
+
+-lm => para usar funções matemáticas, no projeto utilizo função round
