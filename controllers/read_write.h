@@ -94,9 +94,7 @@ void* slave_read_write(void* args){
 			
 		}
 		//conta qtd de operações ja realizadas.
-		pthread_rwlock_rdlock(&(context->rwlock));//bloqueiado para leitura
 		cont_operacoes = context->cont_operacao_insert + context->cont_operacao_delete + context->cont_operacao_search;			
-		pthread_rwlock_unlock(&(context->rwlock));//desbloqueia leitura
 		
 	}
 }

@@ -40,7 +40,26 @@ Contexto *new_contexto(){
 	//inicializa mutex do contexto
 	return context;
 }
+//Libera da memória o contexto
 void finaliza_context(Contexto *context){
 	//finaliza mutex do contexto
 	free(context);
+}
+
+/**
+* Função responsável por resetar contadores do contexto.
+* Assim o contexto pode ser utilizado em outra operação
+* com apenas as entradas do usuarios.
+*/
+void resetar_contexto(Contexto *context){
+	context->cont_operacao_search=0;
+	context->cont_operacao_insert=0;
+	context->cont_operacao_delete=0;
+	context->cont_insert=0;
+	context->cont_delete=0;
+	//context->t_inicial.tv_sec=0;
+	//context->t_inicial.tv_usec=0;
+	//context->t_final.tv_sec=0;
+	//context->t_final.tv_usec=0;
+	
 }

@@ -12,7 +12,7 @@
 * solicitado pelo usuário
 * arquivo: main.c
 */
-void start(Node* lista, int qtd_threads, int MODO);
+void start(Node* lista, int MODO);
 
 /**
 * Função responsável por criar threads e finalizálas, 
@@ -87,5 +87,11 @@ long ajusta_qtd_operacoes(long total_operacao,long *_insert, long *_delete, long
 */
 void imprimir_contexto(Contexto *context);
 
+/**
+* Função responsável por pegar entradas do usuários
+* para preencher informações iniciais do contexto.
+* Arquivo: main.c
+*/
+void pegar_entradas_do_usuario(Contexto *context);
 
 /******* FIM FUNÇÕES ******/

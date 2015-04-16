@@ -17,6 +17,8 @@
 
 #define TITLE_MUTEX_BY_NODE "************************************************************\n******************* Modo Um Mutex por nó  ******************\n************************************************************\n"
 
+#define TITLE_ALL       	"************************************************************\n****************** Calcular todos os Modos  ****************\n************************************************************\n"
+
 #define PRESS_ENTER		"\nPressione Enter para continuar..."
 #define FALHA_CRIAR_THREADS	 "pthread_create falhou"
 #define FALHA_ESPERAR_THREADS "pthread_join falhou"
@@ -29,6 +31,7 @@
 #define MUTEX_BY_NODE 2
 #define READ_WRITE 3
 #define MANUAL 4
+#define ALL 5
 
 
 /** CORES **/
