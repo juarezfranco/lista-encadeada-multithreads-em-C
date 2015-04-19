@@ -51,19 +51,16 @@ void* slave_mutex_all(void *args){
 		operacao = get_randomic_operacao();//verifica qual operação thread deve fazer, inserir, deletar ou buscar.
 		valor = 1+rand()%max;//recupera um valor randomico
 		//verifica operação de inserção
+			
 		if(operacao==INSERT){
-			
-			if(operacao==INSERT){
-				pthread_mutex_lock(&(context->list_mutex));//sessão crítica
-				if ( context->cont_operacao_insert < context->qtd_insert ){
-					node_antecessor = buscarAntecessor(context->lista,valor);//recupera nó antecessor do que deseja inserir
-					result = inserir(node_antecessor, valor);//passa referencia do nó anterior para a função inserir. Assim elimina a necessidade de fazer busca dentro do seu escopo														
-					context->cont_insert+=result;//conta inserção bem sucedida, quando não inserção é repetida
-					context->cont_operacao_insert++;//incrementa contador do contexto de inserções ja feita pelas threads.
-				}
-				pthread_mutex_unlock(&(context->list_mutex));//libera da sessão crítica	
+			pthread_mutex_lock(&(context->list_mutex));//sessão crítica
+			if ( context->cont_operacao_insert < context->qtd_insert ){
+				node_antecessor = buscarAntecessor(context->lista,valor);//recupera nó antecessor do que deseja inserir
+				result = inserir(node_antecessor, valor);//passa referencia do nó anterior para a função inserir. Assim elimina a necessidade de fazer busca dentro do seu escopo														
+				context->cont_insert+=result;//conta inserção bem sucedida, quando não inserção é repetida
+				context->cont_operacao_insert++;//incrementa contador do contexto de inserções ja feita pelas threads.
 			}
-			
+			pthread_mutex_unlock(&(context->list_mutex));//libera da sessão crítica	
 		}
 		//verifica operação de remoção
 		if(operacao==DELETE){

@@ -38,7 +38,7 @@ void* slave_read_write(void* args){
 	long valor;//valor chave passado por parametro para funções de inserção, remoção e busca
 	int operacao;//determina operação que thread deve fazer, inserção, remoção ou busca
 	int result;//resultado das funções de inserção e remoção, se foi inserido bem sucedido ou removido com sucesso
-	long max=context->qtd_operacoes*5; //determina numero maximo que pode ser gerado para a chave
+	long max=context->qtd_operacoes*10; //determina numero maximo que pode ser gerado para a chave
 	Node *node_antecessor;//Variavel utilizada para receber retorno de função buscar antecessor
 	int cont_operacoes=0;//contador de operações ja realizadas
 
