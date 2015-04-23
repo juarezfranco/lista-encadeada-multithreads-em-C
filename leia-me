@@ -1,4 +1,4 @@
-Para compilar use o omando
+Para compilar use o comando
 
 $ gcc -g -Wall -o <nome_exec> <nome_fonte.c> -lpthread -lm
 
